@@ -49,3 +49,33 @@ def get_appointment(appointment_id: int, db: Session = Depends(get_db)):
     if not appointment:
         raise HttpException(status_code=404, detail="Appointment not found")
     return appointment
+
+
+# Delete appointment by ID
+@router.delete("/{appointment_id}", response_model=schemas.AppointmentResponse)
+def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
+    appointment = db.query(models.Appointment).filter(models.Appointment.id == appointment_id).first()
+    if not appointment:
+        raise HttpException(status_code=404, detail="Appointment not found")
+    
+    db.delete(appointment)
+    db.commit
+
+    return appointment
+
+
+# Update appointment
+@router.put("/{appointment_id}", response_model=schemas.AppointmentResponse)
+def update_appointment(appointment_id: int, updated_appointment: schemas.AppointmentUpdate, db: Session = Depends(get_db)):
+    appointment = db.query(models.Appointment).filter(models.Appointment.id == appointment_id).first()
+    if not appointment:
+        raise HttpException(status_code=404, detail="Appointment not found")
+
+    for key, value in updated_appointment.dict(exclude_unset=True).items():
+        setattr(appointment, key, value)
+
+    db.commit()
+    db.refresh(appointment)
+
+    return appointment
+

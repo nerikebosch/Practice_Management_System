@@ -48,3 +48,32 @@ def get_invoice(invoice_id: int, db: Session = Depends(get_db)):
     if not invoice:
         raise HTTPException(status_code=404, detail="Invoice not found")
     return invoice
+
+
+# Delete an invoice by ID
+@router.delete("/{invoice_id}", response_model=schemas.InvoiceResponse)
+def delete_invoice(invoice_id: int, db: Session = Depends(get_db)):
+    invoice = db.query(models.Invoice).filter(models.Invoice.id == invoice_id).first()
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+
+    db.delete(invoice)
+    db.commit()
+
+    return invoice
+
+
+# Update invoice
+@router.put("/{invoice_id}", response_model=schemas.InvoiceResponse)
+def update_invoice(invoice_id: int, updated_invoice: schemas.InvoiceUpdate, db: Session = Depends(get_db)):
+    invoice = db.query(models.Invoice).filter(models.Invoice.id == invoice_id).first()
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    for key, value in updated_invoice.dict(exclude_unset=True).items():
+        setattr(invoice, key, value)
+
+    db.commit()
+    db.refresh(invoice)
+
+    return invoice
