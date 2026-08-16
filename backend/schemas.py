@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date, time, datetime
+from typing import Optional
 
 class PatientCreate(BaseModel):
     first_name: str
@@ -56,3 +57,21 @@ class InvoiceResponse(BaseModel):
 
 
 
+class PatientUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    date_of_birth: Optional[date] = None
+    gender: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+
+class AppointmentUpdate(BaseModel):
+    appointment_date: Optional[date] = None
+    start_time: Optional[time] = None
+    end_time: Optional[time] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+class InvoiceUpdate(BaseModel):
+    amount: Optional[float] = None
+    status: Optional[str] = None

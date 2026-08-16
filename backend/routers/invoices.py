@@ -68,7 +68,7 @@ def delete_invoice(invoice_id: int, db: Session = Depends(get_db)):
 def update_invoice(invoice_id: int, updated_invoice: schemas.InvoiceUpdate, db: Session = Depends(get_db)):
     invoice = db.query(models.Invoice).filter(models.Invoice.id == invoice_id).first()
     if not invoice:
-        raise HTTPException(status_code=404, detail="Patient not found")
+        raise HTTPException(status_code=404, detail="Invoice not found")
 
     for key, value in updated_invoice.dict(exclude_unset=True).items():
         setattr(invoice, key, value)
