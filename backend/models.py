@@ -14,6 +14,7 @@ class Patient(Base):
     gender = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
+    created_at = Column(DateTime, nullable=False, server_default='now()')
 
     appointments = relationship('Appointment', back_populates='patient')
 
@@ -28,6 +29,7 @@ class Appointment(Base):
     end_time = Column(Time, nullable=False)
     status = Column(String, default='Scheduled')
     notes = Column(String, nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default='now()')
 
     patient = relationship('Patient', back_populates='appointments')
     invoices = relationship('Invoice', back_populates='appointment')

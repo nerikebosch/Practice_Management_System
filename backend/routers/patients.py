@@ -15,6 +15,13 @@ router = APIRouter(
 # Create a new patient
 @router.post("/", response_model=schemas.PatientResponse)
 def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
+    # 1. Check if the email already exists in the database
+    db_patient = db.query(models.Patient).filter(models.Patient.email == patient.email).first()
+    
+    # 2. If it does exist, throw a clean 400 Bad Request error
+    if db_patient:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
     new_patient = models.Patient(
         first_name=patient.first_name,
         last_name=patient.last_name,

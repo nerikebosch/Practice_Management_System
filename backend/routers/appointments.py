@@ -36,7 +36,7 @@ def create_appointment(appointmnet: schemas.AppointmentCreate, db: Session = Dep
 
 
 # Get all appointments
-@router.get("/", response_model= schemas.AppointmentResponse)
+@router.get("/", response_model= list[schemas.AppointmentResponse])
 def get_appointments(db: Session = Depends(get_db)):
     appointments = db.query(models.Appointment).all()
     return appointments
