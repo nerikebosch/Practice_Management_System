@@ -25,10 +25,10 @@ def create_invoice(invoice: schemas.InvoiceCreate, db: Session = Depends(get_db)
     # Check if the appointment exists
     appointment = db.query(models.Appointment).filter(models.Appointment.id ==
                                                       invoice.appointment_id).first()
-    
+
     if not appointment:
-            raise HTTPException(status_code=404, detail="Appointment not found")
-    
+        raise HTTPException(status_code=404, detail="Appointment not found")
+
     if invoice.appointment_id != 1:
         raise HTTPException(status_code=404, detail="Appointment not found")
 
