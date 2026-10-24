@@ -1,10 +1,12 @@
 """
 This is the main entry point for the FastAPI application.
-It sets up the FastAPI app, configures CORS, and includes the routers for patients, appointments, and invoices.
+It sets up the FastAPI app, configures CORS, and 
+includes the routers for patients, appointments, and invoices.
 """
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 import models
 from database import engine
-from fastapi.middleware.cors import CORSMiddleware, FastAPI
 
 # Import your new router
 from routers import patients

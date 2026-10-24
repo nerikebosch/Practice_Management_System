@@ -17,13 +17,13 @@ router = APIRouter(
 
 # Create a new appointment
 @router.post("/", response_model=schemas.AppointmentResponse)
-def create_appointment(appointmnet: schemas.AppointmentCreate, 
+def create_appointment(appointmnet: schemas.AppointmentCreate,
                        db: Session = Depends(get_db)):
     """
     Create a new appointment in the database.
     """
     # Check if the patient exists
-    patient = db.query(models.Patient).filter(models.Patient.id 
+    patient = db.query(models.Patient).filter(models.Patient.id
                                               == appointmnet.patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
@@ -61,11 +61,11 @@ def get_appointment(appointment_id: int, db: Session = Depends(get_db)):
     """
     Get an appointment by ID from the database.
     """
-    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+    appointment = db.query(models.Appointment).filter(models.Appointment.id
                                                       == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
-    
+
     return appointment
 
 
@@ -75,11 +75,11 @@ def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
     """
     Delete an appointment by ID from the database.
     """
-    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+    appointment = db.query(models.Appointment).filter(models.Appointment.id
                                                       == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
-    
+
     db.delete(appointment)
     db.commit()
 
@@ -88,12 +88,12 @@ def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
 
 # Update appointment
 @router.put("/{appointment_id}", response_model=schemas.AppointmentResponse)
-def update_appointment(appointment_id: int, updated_appointment: schemas.AppointmentUpdate, 
+def update_appointment(appointment_id: int, updated_appointment: schemas.AppointmentUpdate,
                        db: Session = Depends(get_db)):
     """
     Update an appointment by ID in the database.
     """
-    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+    appointment = db.query(models.Appointment).filter(models.Appointment.id
                                                       == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")

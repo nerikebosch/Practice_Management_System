@@ -1,6 +1,9 @@
+# pylint: disable=too-few-public-methods
+
 """
 This module defines the SQLAlchemy models for the application.
-It includes the Patient, Appointment, and Invoice models, which represent the corresponding tables in the database
+It includes the Patient, Appointment, and 
+Invoice models, which represent the corresponding tables in the database
 """
 from sqlalchemy import Column, Integer, String, Float, Date, Time, DateTime, ForeignKey
 from sqlalchemy.orm import relationship, DeclarativeBase
@@ -8,9 +11,9 @@ from sqlalchemy.orm import relationship, DeclarativeBase
 class Base(DeclarativeBase):
     """Base class for SQLAlchemy models.
     This class serves as the base for all SQLAlchemy models in the application.
-    It provides the necessary metadata and configuration for the models to be mapped to the database tables.
+    It provides the necessary metadata and configuration 
+    for the models to be mapped to the database tables.
     """
-    pass
 
 class Patient(Base):
     """

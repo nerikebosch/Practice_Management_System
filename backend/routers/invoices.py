@@ -23,8 +23,12 @@ def create_invoice(invoice: schemas.InvoiceCreate, db: Session = Depends(get_db)
     Create a new invoice in the database.
     """
     # Check if the appointment exists
-    appointment = db.query(models.Appointment).filter(models.Appointment.id == 
+    appointment = db.query(models.Appointment).filter(models.Appointment.id ==
                                                       invoice.appointment_id).first()
+    
+    if not appointment:
+            raise HTTPException(status_code=404, detail="Appointment not found")
+    
     if invoice.appointment_id != 1:
         raise HTTPException(status_code=404, detail="Appointment not found")
 
@@ -62,7 +66,7 @@ def get_invoice(invoice_id: int, db: Session = Depends(get_db)):
     invoice = db.query(models.Invoice).filter(models.Invoice.id == invoice_id).first()
     if not invoice:
         raise HTTPException(status_code=404, detail="Invoice not found")
-    
+
     return invoice
 
 
@@ -84,7 +88,7 @@ def delete_invoice(invoice_id: int, db: Session = Depends(get_db)):
 
 # Update invoice
 @router.put("/{invoice_id}", response_model=schemas.InvoiceResponse)
-def update_invoice(invoice_id: int, updated_invoice: schemas.InvoiceUpdate, 
+def update_invoice(invoice_id: int, updated_invoice: schemas.InvoiceUpdate,
                    db: Session = Depends(get_db)):
     """
     Update an invoice by ID in the database.

@@ -24,11 +24,11 @@ def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)
     """
     # Check if the email already exists in the database
     db_patient = db.query(models.Patient).filter(models.Patient.email == patient.email).first()
-    
+
     # If it does exist, throw a clean 400 Bad Request error
     if db_patient:
         raise HTTPException(status_code=400, detail="Email already registered")
-    
+
     new_patient = models.Patient(
         first_name=patient.first_name,
         last_name=patient.last_name,
@@ -65,7 +65,7 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
-    
+
     return patient
 
 
@@ -87,7 +87,8 @@ def delete_patient(patient_id: int, db: Session = Depends(get_db)):
 
 # Update patient information
 @router.put("/{patient_id}", response_model=schemas.PatientResponse)
-def update_patient(patient_id: int, updated_patient: schemas.PatientUpdate, db: Session = Depends(get_db)):
+def update_patient(patient_id: int, updated_patient: schemas.PatientUpdate,
+                   db: Session = Depends(get_db)):
     """
     Update a patient's information by ID.
     """

@@ -1,6 +1,9 @@
-"""This module sets up the database connection and session management for the FastAPI application.
-It uses SQLAlchemy to connect to a PostgreSQL database and provides a session factory for creating database sessions.
-The get_db function is a dependency that provides a database session for each API request.
+"""This module sets up the database connection 
+nd session management for the FastAPI application.
+It uses SQLAlchemy to connect to a PostgreSQL database 
+and provides a session factory for creating database sessions.
+The get_db function is a dependency that provides 
+a database session for each API request.
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
