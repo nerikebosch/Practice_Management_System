@@ -1,6 +1,10 @@
-from fastapi import FastAPI
+"""
+This is the main entry point for the FastAPI application.
+It sets up the FastAPI app, configures CORS, and includes the routers for patients, appointments, and invoices.
+"""
 import models
 from database import engine
+from fastapi.middleware.cors import CORSMiddleware, FastAPI
 
 # Import your new router
 from routers import patients
@@ -9,10 +13,6 @@ from routers import invoices
 
 # Create the database tables
 models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -25,8 +25,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Your app.include_router(...) lines stay down here!
-
 # Plug the router into the main app
 app.include_router(patients.router)
 app.include_router(appointments.router)
@@ -34,5 +32,8 @@ app.include_router(invoices.router)
 
 @app.get("/")
 def root():
+    """
+    Root endpoint of the API.
+    Returns a welcome message.
+    """
     return {"message": "Welcome to the MedPulse API"}
-

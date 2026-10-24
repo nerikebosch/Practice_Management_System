@@ -1,3 +1,7 @@
+"""
+This module contains the API routes for managing appointments in the database.
+It provides endpoints for creating, retrieving, updating, and deleting appointment records.
+"""
 from fastapi import HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 
@@ -13,9 +17,14 @@ router = APIRouter(
 
 # Create a new appointment
 @router.post("/", response_model=schemas.AppointmentResponse)
-def create_appointment(appointmnet: schemas.AppointmentCreate, db: Session = Depends(get_db)):
+def create_appointment(appointmnet: schemas.AppointmentCreate, 
+                       db: Session = Depends(get_db)):
+    """
+    Create a new appointment in the database.
+    """
     # Check if the patient exists
-    patient = db.query(models.Patient).filter(models.Patient.id == appointmnet.patient_id).first()
+    patient = db.query(models.Patient).filter(models.Patient.id 
+                                              == appointmnet.patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
 
@@ -38,23 +47,36 @@ def create_appointment(appointmnet: schemas.AppointmentCreate, db: Session = Dep
 # Get all appointments
 @router.get("/", response_model= list[schemas.AppointmentResponse])
 def get_appointments(db: Session = Depends(get_db)):
+    """
+    Get all appointments from the database.
+    """
     appointments = db.query(models.Appointment).all()
+
     return appointments
 
 
 # Get an appointment with ID
 @router.get("/{appointment_id}", response_model=schemas.AppointmentResponse)
 def get_appointment(appointment_id: int, db: Session = Depends(get_db)):
-    appointment = db.query(models.Appointment).filter(models.Appointment.id == appointment_id).first()
+    """
+    Get an appointment by ID from the database.
+    """
+    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+                                                      == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
+    
     return appointment
 
 
 # Delete appointment by ID
 @router.delete("/{appointment_id}", response_model=schemas.AppointmentResponse)
 def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
-    appointment = db.query(models.Appointment).filter(models.Appointment.id == appointment_id).first()
+    """
+    Delete an appointment by ID from the database.
+    """
+    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+                                                      == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
     
@@ -66,8 +88,13 @@ def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
 
 # Update appointment
 @router.put("/{appointment_id}", response_model=schemas.AppointmentResponse)
-def update_appointment(appointment_id: int, updated_appointment: schemas.AppointmentUpdate, db: Session = Depends(get_db)):
-    appointment = db.query(models.Appointment).filter(models.Appointment.id == appointment_id).first()
+def update_appointment(appointment_id: int, updated_appointment: schemas.AppointmentUpdate, 
+                       db: Session = Depends(get_db)):
+    """
+    Update an appointment by ID in the database.
+    """
+    appointment = db.query(models.Appointment).filter(models.Appointment.id 
+                                                      == appointment_id).first()
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
 
@@ -78,4 +105,3 @@ def update_appointment(appointment_id: int, updated_appointment: schemas.Appoint
     db.refresh(appointment)
 
     return appointment
-
